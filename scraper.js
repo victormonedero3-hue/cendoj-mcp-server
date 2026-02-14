@@ -14,7 +14,7 @@
 
 const WebSocket = require('ws');
 
-const SERVER_URL = 'wss://cendoj-mcp-server.onrender.com/mcp';
+const SERVER_URL = process.env.SERVER_URL || 'wss://cendoj-mcp-server.onrender.com/mcp';
 
 // ─────────────────────────────────────────────
 // Cliente MCP (JSON-RPC 2.0 sobre WebSocket)
