@@ -97,11 +97,11 @@ app.get('/health', (_req, res) => {
 });
 
 app.post('/api/contact', (req, res) => {
-  const { nombre, email, empresa, mensaje } = req.body || {};
-  if (!nombre || !email || !mensaje) {
-    return res.status(400).json({ error: 'Missing required fields: nombre, email, mensaje' });
+  const { name, email, company } = req.body || {};
+  if (!name || !email || !company) {
+    return res.status(400).json({ error: 'Missing fields' });
   }
-  return res.status(200).json({ ok: true, leadId: `lead_${Date.now()}`, empresa: empresa || null });
+  return res.status(200).json({ ok: true, leadId: `lead_${Date.now()}` });
 });
 
 app.get('/', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
