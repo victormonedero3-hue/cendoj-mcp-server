@@ -1,1 +1,28 @@
-<!doctype html><html lang='es'><head><meta charset='utf-8'/><meta name='viewport' content='width=device-width,initial-scale=1'/><title>Contacto | NEXORA</title><link rel='stylesheet' href='/styles.css'/></head><body><header class='nav'><div class='container nav-in'><a class='brand' href='/'>NEXORA <span>Digital Contact</span></a><nav class='links'><a href='/about'>Sobre nosotros</a><a href='/services'>Servicios</a><a href='/contact'>Contacto</a></nav></div></header><section class='section'><div class='container fade'><h1 style='font-size:42px'>Hablemos de tu operación</h1><form class='card' onsubmit='submitLead(event)'><input name='nombre' required placeholder='Nombre'/><input name='email' type='email' required placeholder='Email corporativo'/><input name='empresa' placeholder='Empresa (opcional)'/><textarea name='mensaje' rows='5' required placeholder='Cuéntanos tu reto'></textarea><button class='btn btn-primary' style='margin-top:14px;width:100%'>Solicitar demo gratuita</button><p id='formStatus'></p></form></div></section><script src='/app.js'></script></body></html>
+<!doctype html>
+<html lang='es'>
+<head>
+  <meta charset='utf-8'/>
+  <meta name='viewport' content='width=device-width,initial-scale=1'/>
+  <title>Contacto | NEXORA</title>
+  <link rel='stylesheet' href='/styles.css'/>
+</head>
+<body>
+<header class='nav'><div class='container nav-in'><a class='brand' href='/'>NEXORA <span>Digital Contact</span></a><nav class='links'><a href='/about'>Sobre nosotros</a><a href='/services'>Servicios</a><a href='/contact'>Contacto</a></nav></div></header>
+<section class='section'>
+  <div class='container fade'>
+    <span class='kicker'>Hablemos de conversión</span>
+    <h1 style='font-size:44px'>Cuéntanos tu objetivo de ventas en seguros</h1>
+    <p class='lead mini'>Te devolvemos un diagnóstico con oportunidades de mejora en contactabilidad, cierre y productividad comercial.</p>
+    <form class='card form-card' onsubmit='submitLead(event)'>
+      <input name='nombre' required placeholder='Nombre'/>
+      <input name='email' type='email' required placeholder='Email corporativo'/>
+      <input name='empresa' placeholder='Aseguradora / Correduría (opcional)'/>
+      <textarea name='mensaje' rows='5' required placeholder='Ejemplo: queremos aumentar un 20% el cierre en Auto y reducir CPA en campañas digitales'></textarea>
+      <button class='btn btn-primary' style='margin-top:14px;width:100%'>Solicitar diagnóstico</button>
+      <p id='formStatus'></p>
+    </form>
+  </div>
+</section>
+<script src='/app.js'></script>
+</body>
+</html>
