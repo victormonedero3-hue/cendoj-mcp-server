@@ -1,6 +1,6 @@
 :root{--blue:#005BFF;--carbon:#0A0A0A;--green:#00FF9D;--surface:#151922;--text:#e8edf9}
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at 70% -10%,#11327f 0%,#0a0a0a 36%);color:var(--text)}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at 70% -10%,#133894 0%,#0a0a0a 38%);color:var(--text)}
 a{color:inherit;text-decoration:none}
 .container{max-width:1140px;margin:auto;padding:0 24px}
 
@@ -15,15 +15,17 @@ a{color:inherit;text-decoration:none}
 .btn-secondary{border:1px solid #ffffff30;background:#ffffff0f}
 .btn-secondary:hover{box-shadow:0 0 25px #00ff9d55;border-color:#00ff9d80}
 
-.hero{padding:94px 0 82px;border-bottom:1px solid #ffffff1f}
+.hero{padding:96px 0 86px;border-bottom:1px solid #ffffff1f}
 .kicker{display:inline-block;padding:7px 14px;border-radius:999px;border:1px solid #4a85ff;background:#005bff1f;color:#92b6ff;font-size:13px}
-h1{font-size:60px;line-height:1.02;margin:18px 0 0;letter-spacing:-.7px}h1 span{color:var(--blue)}
-.lead{max-width:820px;color:#c4cee2;font-size:20px;line-height:1.45}.lead.mini{font-size:18px}
+h1{font-size:62px;line-height:1.02;margin:18px 0 0;letter-spacing:-.7px}h1 span{color:var(--blue)}
+.lead{max-width:840px;color:#c4cee2;font-size:20px;line-height:1.45}.lead.mini{font-size:18px}
 
 .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
-.section{padding:78px 0}
+.actions.center{justify-content:center}
+.section{padding:80px 0}
+.section-soft{background:linear-gradient(180deg,#0b0f18,#090b11)}
 .title{font-size:42px;line-height:1.15;margin:0 0 24px;letter-spacing:-.4px}
-.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
 .card{border:1px solid #ffffff1f;background:linear-gradient(180deg,#1a1f2c,#10141d);border-radius:18px;padding:24px}
 .highlight{border-color:#3264c5;box-shadow:0 0 30px #0049d230}
 
@@ -50,6 +52,6 @@ form input,form textarea{width:100%;background:#00000033;border:1px solid #fffff
 @media(max-width:960px){
   h1{font-size:44px}
   .title{font-size:34px}
-  .g2,.g3,.table,.stats{grid-template-columns:1fr}
+  .g2,.g3,.g4,.table,.stats{grid-template-columns:1fr}
   .links{display:none}
 }
