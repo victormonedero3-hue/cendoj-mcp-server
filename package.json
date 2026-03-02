@@ -1,16 +1,25 @@
 {
-  "name": "cendoj-mcp-server",
+  "name": "nexora-digital-contact",
   "version": "1.0.0",
-  "description": "MCP Server for Cendoj Jurisprudence API",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "start": "node index.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "ws": "^8.13.0"
+    "framer-motion": "^11.0.8",
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
-  "engines": {
-    "node": "20"
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.5",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3"
   }
 }
