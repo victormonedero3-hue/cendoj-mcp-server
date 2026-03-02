@@ -6,7 +6,26 @@ async function submitLead(event){
   const form = event.currentTarget;
   const status = document.getElementById('formStatus');
   const payload = Object.fromEntries(new FormData(form).entries());
-  const res = await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-  if(res.ok){status.textContent='✅ Solicitud enviada. Te contactaremos en breve.';status.style.color='#00FF9D';form.reset();}
-  else{status.textContent='❌ Error enviando el formulario.';status.style.color='#ff7171';}
+
+  status.textContent = 'Enviando...';
+  status.style.color = '#9bb6ff';
+
+  try {
+    const res = await fetch('/api/contact',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+
+    if(!res.ok){
+      throw new Error('Request failed');
+    }
+
+    status.textContent='✅ Solicitud enviada. Te contactaremos en breve.';
+    status.style.color='#00FF9D';
+    form.reset();
+  } catch {
+    status.textContent='❌ Error enviando el formulario. Inténtalo de nuevo.';
+    status.style.color='#ff7171';
+  }
 }
