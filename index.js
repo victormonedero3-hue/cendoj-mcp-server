@@ -113,75 +113,79 @@ app.get('/services', function(_req, res) { res.sendFile(path.join(__dirname, 'pu
 app.get('/contact', function(_req, res) { res.sendFile(path.join(__dirname, 'public', 'contact.html')); });
 app.use(function(_req, res) { res.status(404).sendFile(path.join(__dirname, 'public', 'index.html')); });
 
-// HTTP + WebSocket MCP
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server, path: '/mcp' });
+// Exportar app para Vercel (serverless) y arrancar localmente si se ejecuta directamente
+module.exports = app;
 
-function buildMcpResponse(id, result) {
-  return JSON.stringify({ jsonrpc: '2.0', result: result, id: id });
-}
-function buildMcpError(id, code, message) {
-  return JSON.stringify({ jsonrpc: '2.0', error: { code: code, message: message }, id: id });
-}
+if (require.main === module) {
+  const server = http.createServer(app);
+  const wss = new WebSocket.Server({ server, path: '/mcp' });
 
-wss.on('connection', function(ws) {
-  ws.send(buildMcpResponse(0, {
-    protocolVersion: '2024-11-05',
-    capabilities: { logging: {}, tools: {} },
-    serverInfo: { name: 'Cendoj MCP Server', version: '1.2.0' },
-  }));
+  function buildMcpResponse(id, result) {
+    return JSON.stringify({ jsonrpc: '2.0', result: result, id: id });
+  }
+  function buildMcpError(id, code, message) {
+    return JSON.stringify({ jsonrpc: '2.0', error: { code: code, message: message }, id: id });
+  }
 
-  ws.on('message', function(raw) {
-    var req;
-    try { req = JSON.parse(raw); } catch(e) { return ws.send(buildMcpError(null, -32700, 'Parse error')); }
+  wss.on('connection', function(ws) {
+    ws.send(buildMcpResponse(0, {
+      protocolVersion: '2024-11-05',
+      capabilities: { logging: {}, tools: {} },
+      serverInfo: { name: 'Cendoj MCP Server', version: '1.2.0' },
+    }));
 
-    var method = req.method;
-    var params = req.params;
-    var id = req.id;
+    ws.on('message', function(raw) {
+      var req;
+      try { req = JSON.parse(raw); } catch(e) { return ws.send(buildMcpError(null, -32700, 'Parse error')); }
 
-    if (method === 'initialize') {
-      return ws.send(buildMcpResponse(id, {
-        protocolVersion: '2024-11-05',
-        capabilities: { logging: {}, tools: {} },
-        serverInfo: { name: 'Cendoj MCP Server', version: '1.2.0' },
-      }));
-    }
+      var method = req.method;
+      var params = req.params;
+      var id = req.id;
 
-    if (method === 'tools/list') {
-      return ws.send(buildMcpResponse(id, { tools: [
-        { name: 'list_sentences', description: 'Lista todas las sentencias.', inputSchema: { type: 'object', properties: {}, required: [] } },
-        { name: 'search_by_sala', description: 'Busca sentencias por sala.', inputSchema: { type: 'object', properties: { sala: { type: 'string' } }, required: ['sala'] } },
-        { name: 'search_by_judge', description: 'Busca sentencias por juez.', inputSchema: { type: 'object', properties: { juez: { type: 'string' } }, required: ['juez'] } },
-        { name: 'get_sentence', description: 'Obtiene sentencia por ID.', inputSchema: { type: 'object', properties: { id: { type: 'number' } }, required: ['id'] } },
-      ]}));
-    }
-
-    if (method === 'tools/call') {
-      var toolName = params && params.name;
-      var args = (params && params.arguments) || {};
-      var toolResult;
-
-      if (toolName === 'list_sentences') {
-        toolResult = { data: sentencias, count: sentencias.length };
-      } else if (toolName === 'search_by_sala') {
-        toolResult = { data: sentencias.filter(function(s) { return s.sala.toLowerCase().includes(String(args.sala || '').toLowerCase()); }) };
-      } else if (toolName === 'search_by_judge') {
-        toolResult = { data: sentencias.filter(function(s) { return s.juez.toLowerCase().includes(String(args.juez || '').toLowerCase()); }) };
-      } else if (toolName === 'get_sentence') {
-        toolResult = { data: sentencias.find(function(s) { return s.id === Number(args.id); }) || null };
-      } else {
-        toolResult = { error: 'Herramienta desconocida: ' + toolName };
+      if (method === 'initialize') {
+        return ws.send(buildMcpResponse(id, {
+          protocolVersion: '2024-11-05',
+          capabilities: { logging: {}, tools: {} },
+          serverInfo: { name: 'Cendoj MCP Server', version: '1.2.0' },
+        }));
       }
 
-      return ws.send(buildMcpResponse(id, { content: [{ type: 'text', text: JSON.stringify(toolResult) }] }));
-    }
+      if (method === 'tools/list') {
+        return ws.send(buildMcpResponse(id, { tools: [
+          { name: 'list_sentences', description: 'Lista todas las sentencias.', inputSchema: { type: 'object', properties: {}, required: [] } },
+          { name: 'search_by_sala', description: 'Busca sentencias por sala.', inputSchema: { type: 'object', properties: { sala: { type: 'string' } }, required: ['sala'] } },
+          { name: 'search_by_judge', description: 'Busca sentencias por juez.', inputSchema: { type: 'object', properties: { juez: { type: 'string' } }, required: ['juez'] } },
+          { name: 'get_sentence', description: 'Obtiene sentencia por ID.', inputSchema: { type: 'object', properties: { id: { type: 'number' } }, required: ['id'] } },
+        ]}));
+      }
 
-    return ws.send(buildMcpError(id, -32601, 'Metodo desconocido: ' + method));
+      if (method === 'tools/call') {
+        var toolName = params && params.name;
+        var args = (params && params.arguments) || {};
+        var toolResult;
+
+        if (toolName === 'list_sentences') {
+          toolResult = { data: sentencias, count: sentencias.length };
+        } else if (toolName === 'search_by_sala') {
+          toolResult = { data: sentencias.filter(function(s) { return s.sala.toLowerCase().includes(String(args.sala || '').toLowerCase()); }) };
+        } else if (toolName === 'search_by_judge') {
+          toolResult = { data: sentencias.filter(function(s) { return s.juez.toLowerCase().includes(String(args.juez || '').toLowerCase()); }) };
+        } else if (toolName === 'get_sentence') {
+          toolResult = { data: sentencias.find(function(s) { return s.id === Number(args.id); }) || null };
+        } else {
+          toolResult = { error: 'Herramienta desconocida: ' + toolName };
+        }
+
+        return ws.send(buildMcpResponse(id, { content: [{ type: 'text', text: JSON.stringify(toolResult) }] }));
+      }
+
+      return ws.send(buildMcpError(id, -32601, 'Metodo desconocido: ' + method));
+    });
+
+    ws.on('error', function(err) { console.error('[ws] Error:', err.message); });
   });
 
-  ws.on('error', function(err) { console.error('[ws] Error:', err.message); });
-});
-
-server.listen(PORT, function() {
-  console.log('NEXORA server running on http://localhost:' + PORT);
-});
+  server.listen(PORT, function() {
+    console.log('NEXORA server running on http://localhost:' + PORT);
+  });
+}
