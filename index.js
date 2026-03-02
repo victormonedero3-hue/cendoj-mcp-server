@@ -9,7 +9,6 @@ const { Resend } = require('resend');
 // Configuracion
 const app = express();
 const PORT = process.env.PORT || 8080;
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 const LEAD_RECEIVER = process.env.LEAD_EMAIL || 'victormonedero3@gmail.com';
 const FROM_ADDRESS = process.env.FROM_EMAIL || 'onboarding@resend.dev';
@@ -75,8 +74,11 @@ app.post('/api/contact', rateLimit, async function(req, res) {
 
     if (!process.env.RESEND_API_KEY) {
       console.warn('[contact] Sin RESEND_API_KEY - lead guardado sin email.');
-      return res.status(200).json({ ok: true, leadId: 'lead_' + Date.now(), note: 'Sin API key.' });
+      return res.status(200).json({ ok: true, leadId: 'lead_' + Date.now(), note: 'Sin API key configurada.' });
     }
+
+    // Inicializar Resend aqui para no fallar al arrancar sin API key
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     const result = await resend.emails.send({
       from: FROM_ADDRESS,
@@ -113,9 +115,10 @@ app.get('/services', function(_req, res) { res.sendFile(path.join(__dirname, 'pu
 app.get('/contact', function(_req, res) { res.sendFile(path.join(__dirname, 'public', 'contact.html')); });
 app.use(function(_req, res) { res.status(404).sendFile(path.join(__dirname, 'public', 'index.html')); });
 
-// Exportar app para Vercel (serverless) y arrancar localmente si se ejecuta directamente
+// Exportar app para Vercel (serverless)
 module.exports = app;
 
+// Arranque local con WebSocket MCP
 if (require.main === module) {
   const server = http.createServer(app);
   const wss = new WebSocket.Server({ server, path: '/mcp' });
