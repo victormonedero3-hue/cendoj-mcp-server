@@ -189,6 +189,10 @@ if (require.main === module) {
   });
 
   server.listen(PORT, function() {
-    console.log('NEXORA server running on http://localhost:' + PORT);
+    const localUrl = 'http://localhost:' + PORT;
+    const environmentUrl = process.env.APP_URL || process.env.PUBLIC_URL || process.env.RENDER_EXTERNAL_URL || localUrl;
+
+    console.log('NEXORA server running on ' + localUrl);
+    console.log('URL entorno: ' + environmentUrl);
   });
 }
